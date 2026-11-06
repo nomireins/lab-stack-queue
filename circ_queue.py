@@ -31,17 +31,30 @@ class Queue:
     ## Don't change the above code!
     
     def enqueue(self, val: Any):
-        raise NotImplementedError
-
+        if self.count == len(self.data):
+            self.resize(2 * len(self.data))
+        if self.empty():
+            self.head = self.tail = 0
+        else:
+            self.tail = (self.tail + 1) % len(self.data)
+        self.data[self.tail] = val
+        self.count += 1
 
     def dequeue(self) -> Any:
-        raise NotImplementedError
+        if self.empty():
+            raise IndexError("queue is empty")
+        val = self.data[self.head]
+        self.head = (self.head + 1) % len(self.data)
+        self.count -= 1
+        return val
 
 
     def resize(self, newsize: int):
         assert len(self.data) < newsize
-        raise NotImplementedError
-
+        newdata = np.empty(newsize, dtype=object)
+        for i in range(self.count):
+            newdata[i] = self.data[(self.head + i) % len(self.data)]
 
     def __iter__(self):
-        raise NotImplementedError
+        for i in range(self.count):
+            yield self.data[(self.head + i) % len(self.data)]
