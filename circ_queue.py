@@ -32,7 +32,7 @@ class Queue:
     
     def enqueue(self, val: Any):
         if self.count == len(self.data):
-            self.resize(2 * len(self.data))
+            raise RuntimeError('Queue is full')
         if self.empty():
             self.head = self.tail = 0
         else:
