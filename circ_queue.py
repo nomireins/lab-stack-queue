@@ -44,8 +44,11 @@ class Queue:
         if self.empty():
             raise IndexError("queue is empty")
         val = self.data[self.head]
-        self.head = (self.head + 1) % len(self.data)
         self.count -= 1
+        if self.count == 0:
+            self.head = self.tail = -1
+        else:
+            self.head = (self.head + 1) % len(self.data)
         return val
 
 
@@ -54,6 +57,9 @@ class Queue:
         newdata = np.empty(newsize, dtype=object)
         for i in range(self.count):
             newdata[i] = self.data[(self.head + i) % len(self.data)]
+        self.data = newdata
+        self.head = 0 if self.count else -1
+        self.tail = self.count - 1
 
     def __iter__(self):
         for i in range(self.count):
